@@ -16,12 +16,20 @@ class HandlerAdapter
 {
     private $adapter=null;
 
+    /**
+     * HandlerAdapter constructor.
+     *
+     * @param $adapter
+     *
+     * @throws HuicuiApiApapterException
+     */
     function __construct($adapter)
     {
         if(empty($adapter)){
             throw new HuicuiApiApapterException("参数错误");
         }
         $this->adapter=$adapter;
+        return $this;
     }
 
 

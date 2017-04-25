@@ -117,10 +117,13 @@ class HuicuiApi
 
     /**
      * @param HandlerAdapter $Handler
+     *
+     * @return $this
      */
     public function setHandler(HandlerAdapter $Handler)
     {
         $this->_Handler = $Handler;
+        return $this;
     }
 
     /**
