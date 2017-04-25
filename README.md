@@ -10,7 +10,7 @@ for PHP
 
 Via Composer
 ```
-$ composer require arabcoders/cache
+$ composer require huicui/huicuiapi
 ```
     
 Usage Example.

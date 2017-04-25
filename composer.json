@@ -1,11 +1,44 @@
 {
   "name": "huicui/huicuiapi",
-  "description": "A short description of what your package does",
+  "description": "HuicuiApi for PHP",
+  "keywords": ["huicui", "huicui-api","huicui-sdk"],
+  "homepage": "https://github.com/xuwu125/HuicuiApi",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Changhe Hiter",
+      "email": "xuwu125@gmail.com",
+      "homepage": "https://github.com/xuwu125"
+    }
+  ],
   "require": {
     "php": "^5.3.3",
-    "another-vendor/package": "1.*",
     "monolog/monolog": "*",
     "guzzlehttp/guzzle":"*"
+  },
+  "require-dev": {
+    "monolog/monolog": "*",
+    "guzzlehttp/guzzle":"*",
+    "phpunit/phpunit": "^5.5",
+    "predis/predis": "^1.1",
+    "phpspec/prophecy": "^1.6.1"
+  },
+  "suggest": {
+    "guzzlehttp/guzzle": "Used for sending Http requests",
+    "monolog/monolog": "To deal with the log"
+  },
+  "autoload": {
+    "huicuiapi": {"HuicuiApi\\": "HuicuiApi"}
+  },
+  "autoload-dev": {
+    "huicuiapi": {"HuicuiApi\\": "tests"}
+  },
+  "scripts": {
+    "test": [
+      "parallel-lint . --exclude vendor",
+      "phpunit"
+    ]
   },
   "repositories": {
     "packagist": {
