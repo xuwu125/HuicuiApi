@@ -81,13 +81,18 @@ class HuicuiApi
         $this->AppKey = $appKey;
         $this->AppSecret = $AppSecret;
         $this->headers = [
-            'User-Agent'        => static::CLIENT_NAME . '/' . static::VERSION .
-                " PHP/" . PHP_VERSION . " " . PHP_OS . "/" . PHP_SAPI . "/" . $_SERVER ['SERVER_SOFTWARE'],
-            'Accept'            => 'application/json',
-            "Server-Time"       => time(),
-            "Server-Ip-Address" => gethostbyname($_SERVER['SERVER_NAME'])
+            'User-Agent'  => static::CLIENT_NAME . '/' . static::VERSION .
+                " PHP/" . PHP_VERSION . " " . PHP_OS . "/" . PHP_SAPI . "/" . $this->getSoftWaveName(),
+            'Accept'      => 'application/json',
+            "Server-Time" => time(),
         ];
     }
+
+    protected function getSoftWaveName()
+    {
+        return isset($_SERVER ['SERVER_SOFTWARE']) ? $_SERVER ['SERVER_SOFTWARE'] : 'Shell';
+    }
+
 
     /**
      * 初始化 Http请求类
@@ -104,7 +109,7 @@ class HuicuiApi
      */
     public function getHandler()
     {
-        if(empty($this->_Handler) || $this->_Handler instanceof HandlerAdapter){
+        if (empty($this->_Handler) || $this->_Handler instanceof HandlerAdapter) {
             throw new HuicuiApiException("Handler 未初始化");
         }
         return $this->_Handler;
@@ -133,8 +138,8 @@ class HuicuiApi
      */
     public function getToken()
     {
-        $token=$this->getHandler()->get($this->getTokenCacheID());
-        return (empty($token) || strlen($token)<=16)?"":$token;
+        $token = $this->getHandler()->get($this->getTokenCacheID());
+        return (empty($token) || strlen($token) <= 16) ? "" : $token;
     }
 
     /**
@@ -177,8 +182,8 @@ class HuicuiApi
      */
     public function requestAccessToken()
     {
-        $apiName='/v1.0/accesstoken';
-        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName , [
+        $apiName = '/v1.0/accesstoken';
+        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName, [
             'headers'     => $this->headers,
             'form_params' => [
                 'appid' => $this->AppId,
@@ -214,7 +219,7 @@ class HuicuiApi
             throw new HuicuiApiException("接口名不可为空");
         }
         $token = $this->getTokenCacheID();
-        if (empty($token) ) {
+        if (empty($token)) {
             throw new HuicuiApiException("Token无效，请先存储 Token");
         }
         $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName . '?accesstoken=' . $token, [
