@@ -13,7 +13,7 @@ use HuicuiApi\Handler\HandlerAdapter;
  */
 class HuicuiApi
 {
-    const VERSION = '1.0.2';
+    const VERSION = '1.0.3';
     /**
      * 请求的协议，支持 http 和 https
      */
