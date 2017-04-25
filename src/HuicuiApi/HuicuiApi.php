@@ -100,9 +100,13 @@ class HuicuiApi
 
     /**
      * @return HandlerAdapter
+     * @throws HuicuiApiException
      */
     public function getHandler()
     {
+        if(empty($this->_Handler) || $this->_Handler instanceof HandlerAdapter){
+            throw new HuicuiApiException("Handler 未初始化");
+        }
         return $this->_Handler;
     }
 
