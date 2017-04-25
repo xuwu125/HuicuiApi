@@ -15,6 +15,7 @@
   "require": {
     "php": "^5.3.3",
     "monolog/monolog": "*",
+    "psr/log": "^1.0.1",
     "guzzlehttp/guzzle":"*"
   },
   "require-dev": {
@@ -29,10 +30,10 @@
     "monolog/monolog": "To deal with the log"
   },
   "autoload": {
-    "huicuiapi": {"HuicuiApi\\": "HuicuiApi"}
+    "psr-4": {"HuicuiApi\\": "src/HuicuiApi"}
   },
   "autoload-dev": {
-    "huicuiapi": {"HuicuiApi\\": "tests"}
+    "psr-4": {"HuicuiApi\\": "tests/HuicuiApi"}
   },
   "scripts": {
     "test": [
