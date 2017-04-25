@@ -19,19 +19,22 @@ class HandlerAdapter
     /**
      * HandlerAdapter constructor.
      *
-     * @param $adapter
+     * @param  \Redis|\Memcached $adapter
      *
      * @throws HuicuiApiApapterException
      */
     function __construct($adapter)
     {
         if(empty($adapter)){
-            throw new HuicuiApiApapterException("参数错误");
+            throw new HuicuiApiApapterException("初始类错误");
+        }
+        $adapterHandlerClass = str_replace('Adapter','',get_called_class());
+        if(!$adapter instanceof $adapterHandlerClass){
+            throw new HuicuiApiApapterException("初始对象必须为 ".$adapterHandlerClass);
         }
         $this->adapter=$adapter;
         return $this;
     }
-
 
     /**
      * @return null*/
