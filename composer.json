@@ -41,6 +41,14 @@
       "phpunit"
     ]
   },
+  "provide": {
+    "psr/log-implementation": "1.0.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
+  },
   "repositories": {
     "packagist": {
       "type": "composer",
