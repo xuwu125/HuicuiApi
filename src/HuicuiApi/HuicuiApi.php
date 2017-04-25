@@ -144,38 +144,73 @@ class HuicuiApi
         $this->getHandler()->set($this->getTokenCacheID(), $Token, static::TOKEN_EXPIRE_TIME);
         return $this;
     }
-    public function requestAccessToken(){
+
+    /**
+     * 生成验证签名
+     * @return string
+     */
+    protected function getSign()
+    {
+        $data = array(
+            'AppID'     => $this->AppId,
+            'AppKey'    => $this->AppKey,
+            'AppSecret' => $this->AppSecret,
+            'date'      => date("Ymd")
+        );
+        $datas = array();
+        foreach ($data as $key => $val) {
+            $datas [] = $key . '=' . rawurlencode($val);
+        }
+        $str = implode('&', $datas);
+        return md5($str);
+    }
+
+    /**
+     * 获取访问句柄 accessToken
+     * @return $this
+     * @throws HuicuiApiException
+     */
+    public function requestAccessToken()
+    {
+        $apiname='/v1.0/accesstoken';
         $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
             'headers'     => $this->headers,
-            'form_params' => $this->getParams()
+            'form_params' => [
+                'appid' => $this->AppId,
+                'sign'  => $this->getSign()
+            ]
         ]);
         if ($res->getStatusCode() == 200) {
             $re = $res->getBody();
             if ($re) {
-                $reObject= ReturnMessage::Transform(json_decode($re));
+                $reObject = ReturnMessage::Transform(json_decode($re));
+                if (!$reObject->isOk()) {
+                    throw new HuicuiApiException($reObject->getMessage());
+                }
+                $this->writeToken($reObject->getData()->accesstoken);
             } else {
-                throw new Exception("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
+                throw new HuicuiApiException("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
             }
         } else {
-            throw new Exception("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
+            throw new HuicuiApiException("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
         }
         return $this;
     }
 
     /**
      * @param $apiname
-     * @param $param
      *
-     * @return static|ReturnMessage
+     * @return ReturnMessage
+     * @throws HuicuiApiException
      */
     protected function requestApi($apiname)
     {
-        if(empty($apiname) || strlen($apiname)<=4 || substr($apiname,0,1)!='/'){
+        if (empty($apiname) || strlen($apiname) <= 4 || substr($apiname, 0, 1) != '/') {
             throw new HuicuiApiException("接口名不可为空");
         }
         $token = $this->getTokenCacheID();
         if (empty($token) || strlen($token) < 16) {
-            throw new HttpInvalidParamException("Token无效，请先存储 Token");
+            throw new HuicuiApiException("Token无效，请先存储 Token");
         }
         $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
             'headers'     => $this->headers,
@@ -188,10 +223,10 @@ class HuicuiApi
             if ($re) {
                 return ReturnMessage::Transform(json_decode($re));
             } else {
-                throw new Exception("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
+                throw new HuicuiApiException("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
             }
         } else {
-            throw new Exception("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
+            throw new HuicuiApiException("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
         }
     }
 
