@@ -13,7 +13,7 @@ use HuicuiApi\Handler\HandlerAdapter;
  */
 class HuicuiApi
 {
-    const VERSION = '1.0';
+    const VERSION = '1.0.1';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -109,13 +109,13 @@ class HuicuiApi
     /**
      * @param HandlerAdapter $Handler
      */
-    public function setHandler($Handler)
+    public function setHandler(HandlerAdapter $Handler)
     {
         $this->_Handler = $Handler;
     }
 
     /**
-     * 获取 Token
+     * 获取 Token 缓存 ID
      * @return string
      */
     public function getTokenCacheID()
@@ -124,12 +124,13 @@ class HuicuiApi
     }
 
     /**
-     * 获取
+     * 获取Token
      * @return mixed
      */
     public function getToken()
     {
-        return $this->getHandler()->get($this->getTokenCacheID());
+        $token=$this->getHandler()->get($this->getTokenCacheID());
+        return (empty($token) || strlen($token)<=16)?"":$token;
     }
 
     /**
@@ -172,8 +173,8 @@ class HuicuiApi
      */
     public function requestAccessToken()
     {
-        $apiname='/v1.0/accesstoken';
-        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
+        $apiName='/v1.0/accesstoken';
+        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName , [
             'headers'     => $this->headers,
             'form_params' => [
                 'appid' => $this->AppId,
@@ -198,21 +199,21 @@ class HuicuiApi
     }
 
     /**
-     * @param $apiname
+     * @param $apiName
      *
      * @return ReturnMessage
      * @throws HuicuiApiException
      */
-    protected function requestApi($apiname)
+    protected function requestApi($apiName)
     {
-        if (empty($apiname) || strlen($apiname) <= 4 || substr($apiname, 0, 1) != '/') {
+        if (empty($apiName) || strlen($apiName) <= 4 || substr($apiName, 0, 1) != '/') {
             throw new HuicuiApiException("接口名不可为空");
         }
         $token = $this->getTokenCacheID();
-        if (empty($token) || strlen($token) < 16) {
+        if (empty($token) ) {
             throw new HuicuiApiException("Token无效，请先存储 Token");
         }
-        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
+        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName . '?accesstoken=' . $token, [
             'headers'     => $this->headers,
             'form_params' => $this->getParams()
         ]);
