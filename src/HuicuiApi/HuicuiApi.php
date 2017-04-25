@@ -1,4 +1,9 @@
 <?php
+namespace HuicuiApi;
+
+use HuicuiApi\Exception\HuicuiApiException;
+use HuicuiApi\Handler\HandlerAdapter;
+
 /**
  * 荟萃 API SDK for PHP
  * Created by PhpStorm.
@@ -41,6 +46,12 @@ class HuicuiApi
      * @var string
      */
     public $AppSecret = '';
+    /**
+     * @var HandlerAdapter
+     */
+    private $_Handler = null;
+
+
     public $params = [];
     protected $headers = [];
 
@@ -57,6 +68,13 @@ class HuicuiApi
         return new static($AppId, $appKey, $AppSecret);
     }
 
+    /**
+     * HuicuiApi constructor.
+     *
+     * @param $AppId
+     * @param $appKey
+     * @param $AppSecret
+     */
     public function __construct($AppId, $appKey, $AppSecret)
     {
         $this->AppId = $AppId;
@@ -71,18 +89,29 @@ class HuicuiApi
         ];
     }
 
+    /**
+     * 初始化 Http请求类
+     * @return \GuzzleHttp\Client
+     */
     public function httpClient()
     {
         return new \GuzzleHttp\Client();
     }
 
     /**
-     * 设置一个缓存器
-     * @return Memcached
+     * @return HandlerAdapter
      */
-    public static function getCache()
+    public function getHandler()
     {
-        return $GLOBALS['di']->getCache();
+        return $this->_Handler;
+    }
+
+    /**
+     * @param HandlerAdapter $Handler
+     */
+    public function setHandler($Handler)
+    {
+        $this->_Handler = $Handler;
     }
 
     /**
@@ -100,7 +129,7 @@ class HuicuiApi
      */
     public function getToken()
     {
-        return static::getCache()->get($this->getTokenCacheID());
+        return $this->getHandler()->get($this->getTokenCacheID());
     }
 
     /**
@@ -112,19 +141,43 @@ class HuicuiApi
      */
     public function writeToken($Token)
     {
-        static::getCache()->set($this->getTokenCacheID(), $Token, static::TOKEN_EXPIRE_TIME);
+        $this->getHandler()->set($this->getTokenCacheID(), $Token, static::TOKEN_EXPIRE_TIME);
+        return $this;
+    }
+    public function requestAccessToken(){
+        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
+            'headers'     => $this->headers,
+            'form_params' => $this->getParams()
+        ]);
+        if ($res->getStatusCode() == 200) {
+            $re = $res->getBody();
+            if ($re) {
+                $reObject= ReturnMessage::Transform(json_decode($re));
+            } else {
+                throw new Exception("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
+            }
+        } else {
+            throw new Exception("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
+        }
         return $this;
     }
 
-
-    protected function requestApi($apiname, $param)
+    /**
+     * @param $apiname
+     * @param $param
+     *
+     * @return static|ReturnMessage
+     */
+    protected function requestApi($apiname)
     {
+        if(empty($apiname) || strlen($apiname)<=4 || substr($apiname,0,1)!='/'){
+            throw new HuicuiApiException("接口名不可为空");
+        }
         $token = $this->getTokenCacheID();
         if (empty($token) || strlen($token) < 16) {
             throw new HttpInvalidParamException("Token无效，请先存储 Token");
         }
-        $client = new \GuzzleHttp\Client();
-        $res = $client->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
+        $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiname . '?accesstoken=' . $token, [
             'headers'     => $this->headers,
             'form_params' => $this->getParams()
         ]);
@@ -133,7 +186,7 @@ class HuicuiApi
         if ($res->getStatusCode() == 200) {
             $re = $res->getBody();
             if ($re) {
-                return json_decode($re);
+                return ReturnMessage::Transform(json_decode($re));
             } else {
                 throw new Exception("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
             }
