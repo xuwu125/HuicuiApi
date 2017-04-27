@@ -17,7 +17,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.1.2';
+    const VERSION = '1.1.3';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -200,7 +200,7 @@ class HuicuiApi
      */
     public function getHandler()
     {
-        if (empty($this->_Handler) || $this->_Handler instanceof HandlerAdapter) {
+        if (empty($this->_Handler) || !$this->_Handler instanceof HandlerAdapter) {
             throw new HuicuiApiException("Handler 未初始化");
         }
         return $this->_Handler;
