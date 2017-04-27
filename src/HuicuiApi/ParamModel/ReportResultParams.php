@@ -77,5 +77,21 @@ class ReportResultParams extends BaseModel
         return true;
     }
 
+    /**
+     * @param string $did
+     */
+    public function setDid($did)
+    {
+        $this->did = $did;
+    }
+
+    /**
+     * @param string $report
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
+    }
+
 
 }
