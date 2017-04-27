@@ -17,7 +17,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.0.9';
+    const VERSION = '1.1.0';
     /**
      * 请求的协议，支持 http 和 https
      */
