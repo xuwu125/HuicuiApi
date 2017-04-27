@@ -17,7 +17,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.0.8';
+    const VERSION = '1.0.9';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -58,7 +58,7 @@ class HuicuiApi
      * @var Logger
      */
     var $log;
-    var $logWrite = true;
+    var $logWrite = false;
 
     public $params = [];
     protected $headers = [];
@@ -94,8 +94,7 @@ class HuicuiApi
             'Accept'      => 'application/json',
             "Server-Time" => time(),
         ];
-        $this->log = new Logger(__CLASS__);
-        $this->log->pushHandler(new StreamHandler(phpcmd::getLogPath() . __CLASS__ . "_" . date("Ymd") . ".log", Logger::DEBUG));
+
     }
 
     /**
@@ -126,10 +125,26 @@ class HuicuiApi
 
     /**
      * @return Logger
+     * @throws HuicuiApiException
      */
     protected function getLog()
     {
+        if (empty($this->log) || !is_object($this->log)) {
+            if ($this->isLogWrite()) {
+                $this->log = new Logger(get_called_class());
+                $this->log->pushHandler(new StreamHandler('/tmp.' . get_called_class() . "_" . date("Ymd") . ".log", Logger::DEBUG));
+            }
+        }
+        if (empty($this->log) || !$this->log instanceof Logger) {
+            throw new HuicuiApiException("log not set");
+        }
         return $this->log;
+    }
+
+    public function setLog(Logger $log)
+    {
+        $this->log = $log;
+        $this->logWrite = true;
     }
 
     /**
