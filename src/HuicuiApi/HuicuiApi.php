@@ -17,7 +17,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.1.5';
+    const VERSION = '1.1.6';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -291,7 +291,7 @@ class HuicuiApi
             if ($re) {
                 $reObject = ReturnMessage::Transform(json_decode($re));
                 if (!$reObject->isOk()) {
-                    throw new HuicuiApiException($reObject->getMessage());
+                    throw new HuicuiApiException($reObject->getMessage(), $reObject->getError(), $reObject->getData());
                 }
                 $this->writeToken($reObject->getData()->accesstoken);
             } else {
