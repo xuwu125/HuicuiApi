@@ -1,8 +1,12 @@
 <?php
 namespace HuicuiApi;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 use HuicuiApi\Exception\HuicuiApiException;
 use HuicuiApi\Handler\HandlerAdapter;
+use GuzzleHttp\Client as GuzzleHttpClient;
+
 
 /**
  * 荟萃 API SDK for PHP
@@ -13,7 +17,7 @@ use HuicuiApi\Handler\HandlerAdapter;
  */
 class HuicuiApi
 {
-    const VERSION = '1.0.4';
+    const VERSION = '1.0.5';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -50,7 +54,11 @@ class HuicuiApi
      * @var HandlerAdapter
      */
     private $_Handler = null;
-
+    /**
+     * @var Logger
+     */
+    var $log;
+    var $logWrite = true;
 
     public $params = [];
     protected $headers = [];
@@ -86,8 +94,64 @@ class HuicuiApi
             'Accept'      => 'application/json',
             "Server-Time" => time(),
         ];
+        $this->log = new Logger(__CLASS__);
+        $this->log->pushHandler(new StreamHandler(phpcmd::getLogPath() . __CLASS__ . "_" . date("Ymd") . ".log", Logger::DEBUG));
     }
 
+    /**
+     * debug
+     *
+     * @param $str
+     * @param $context
+     */
+    protected function debug($str, array $context = array())
+    {
+        if ($this->isLogWrite()) {
+            $this->getLog()->debug($str, $context);
+        }
+    }
+
+    /**
+     * error
+     *
+     * @param $str
+     * @param $context
+     */
+    protected function error($str, array $context = array())
+    {
+        if ($this->isLogWrite()) {
+            $this->getLog()->error($str, $context);
+        }
+    }
+
+    /**
+     * @return Logger
+     */
+    protected function getLog()
+    {
+        return $this->log;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isLogWrite()
+    {
+        return $this->logWrite;
+    }
+
+    /**
+     * @param boolean $logWrite
+     */
+    public function setLogWrite($logWrite)
+    {
+        $this->logWrite = $logWrite;
+    }
+
+    /**
+     * SERVER_SOFTWARE
+     * @return string
+     */
     protected function getSoftWaveName()
     {
         return isset($_SERVER ['SERVER_SOFTWARE']) ? $_SERVER ['SERVER_SOFTWARE'] : 'Shell';
@@ -100,7 +164,7 @@ class HuicuiApi
      */
     public function httpClient()
     {
-        return new \GuzzleHttp\Client();
+        return new GuzzleHttpClient();
     }
 
     /**
@@ -155,6 +219,7 @@ class HuicuiApi
     public function writeToken($Token)
     {
         $this->getHandler()->set($this->getTokenCacheID(), $Token, static::TOKEN_EXPIRE_TIME);
+        $this->debug('Write Accesstoken ' . $Token);
         return $this;
     }
 
@@ -186,6 +251,7 @@ class HuicuiApi
     public function requestAccessToken()
     {
         $apiName = '/v1.0/accesstoken';
+        $this->debug('getAccesstoken ' . $apiName);
         $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName, [
             'headers'     => $this->headers,
             'form_params' => [
@@ -225,12 +291,14 @@ class HuicuiApi
         if (empty($token)) {
             throw new HuicuiApiException("Token无效，请先存储 Token");
         }
+        $this->debug('requestApi ' . $apiName);
         $res = $this->httpClient()->request('POST', static::SCAHMA . '://' . static::DOMAIN . $apiName . '?accesstoken=' . $token, [
             'headers'     => $this->headers,
             'form_params' => $this->getParams()
         ]);
         // 每次请求完毕之后，清空参数
         $this->clearParams();
+        $this->debug('requestApi  StatusCode' . $res->getStatusCode());
         if ($res->getStatusCode() == 200) {
             $re = $res->getBody();
             if ($re) {
@@ -239,6 +307,7 @@ class HuicuiApi
                 throw new HuicuiApiException("HuicuiAp::requestApi Request Url  Content empty", $res->getStatusCode());
             }
         } else {
+
             throw new HuicuiApiException("HuicuiAp::requestApi Request Url Error ", $res->getStatusCode());
         }
     }
