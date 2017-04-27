@@ -48,7 +48,7 @@ class ReturnMessage
      */
     public function getError()
     {
-        return $this->error;
+        return intval($this->error);
     }
 
     /**
@@ -56,7 +56,7 @@ class ReturnMessage
      */
     public function setError($error)
     {
-        $this->error = $error;
+        $this->error = intval($error);
     }
 
     /**
