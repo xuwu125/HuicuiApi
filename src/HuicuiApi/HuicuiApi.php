@@ -17,7 +17,7 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.1.0';
+    const VERSION = '1.1.1';
     /**
      * 请求的协议，支持 http 和 https
      */
@@ -141,10 +141,16 @@ class HuicuiApi
         return $this->log;
     }
 
+    /**
+     * @param Logger $log
+     *
+     * @return $this
+     */
     public function setLog(Logger $log)
     {
         $this->log = $log;
         $this->logWrite = true;
+        return $this;
     }
 
     /**
@@ -156,11 +162,14 @@ class HuicuiApi
     }
 
     /**
-     * @param boolean $logWrite
+     * @param $logWrite
+     *
+     * @return $this
      */
     public function setLogWrite($logWrite)
     {
         $this->logWrite = $logWrite;
+        return $this;
     }
 
     /**
