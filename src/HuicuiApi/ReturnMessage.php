@@ -28,7 +28,7 @@ class ReturnMessage
 
     public static function Transform(\stdClass $json)
     {
-        if(!$json || $json instanceof \stdClass){
+        if(!$json || !$json instanceof \stdClass){
             throw new HuicuiApiException("无效使用解析类");
         }
         return new static($json->error, $json->message, $json->data);
