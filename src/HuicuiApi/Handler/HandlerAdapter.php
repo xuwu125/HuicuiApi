@@ -14,7 +14,7 @@ use HuicuiApi\Exception\HuicuiApiApapterException;
 
 class HandlerAdapter
 {
-    private $adapter=null;
+    private $adapter = null;
 
     /**
      * HandlerAdapter constructor.
@@ -23,22 +23,18 @@ class HandlerAdapter
      *
      * @throws HuicuiApiApapterException
      */
-    function __construct($adapter)
+    function __construct($adapter = null)
     {
-        if(empty($adapter)){
-            throw new HuicuiApiApapterException("初始类错误");
+        if (!empty($adapter)) {
+            $this->setAdapter($adapter);
         }
-        $adapterHandlerClass = str_replace('Adapter','',get_called_class());
-        if(!$adapter instanceof $adapterHandlerClass){
-            throw new HuicuiApiApapterException("初始对象必须为 ".$adapterHandlerClass);
-        }
-        $this->adapter=$adapter;
         return $this;
     }
 
     /**
-     * @return null*/
-     
+     * @return null
+     */
+
     public function getAdapter()
     {
         return $this->adapter;
@@ -54,6 +50,7 @@ class HandlerAdapter
 
     /**
      * 获取一个缓存值
+     *
      * @param $key
      *
      * @return mixed
@@ -65,6 +62,7 @@ class HandlerAdapter
 
     /**
      * 设置一个缓存 的类型的可过期值
+     *
      * @param     $key
      * @param     $val
      * @param int $expire
@@ -73,6 +71,6 @@ class HandlerAdapter
      */
     function set($key, $val, $expire = 7100)
     {
-        return $this->getAdapter()->set($key,$val,$expire);
+        return $this->getAdapter()->set($key, $val, $expire);
     }
 }
