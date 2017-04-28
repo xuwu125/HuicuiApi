@@ -56,6 +56,7 @@ class CreateBsCronParams extends BaseModel
     protected $_mustParams = [
         'cronid', 'data_id', 'data_tag'
     ];
+    const API_NAME='/v1.0/createbscron';
     /**
      * 有效的请求
      */

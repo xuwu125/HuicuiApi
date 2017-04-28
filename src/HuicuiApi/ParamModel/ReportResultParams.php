@@ -36,6 +36,8 @@ class ReportResultParams extends BaseModel
         'did'
     ];
 
+    const API_NAME='/v1.0/createbscron';
+
     public function setParams($params)
     {
         if (!empty($params) && is_array($params)) {
