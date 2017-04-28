@@ -17,53 +17,82 @@ use GuzzleHttp\Client as GuzzleHttpClient;
  */
 class HuicuiApi
 {
-    const VERSION = '1.1.8';
+    /**
+     * 当前接口版本
+     */
+    const VERSION = '1.1.9';
+
     /**
      * 请求的协议，支持 http 和 https
      */
     const SCAHMA = 'http';
+
     /**
      * 接口域名，不可变动
      */
     const DOMAIN = 'api.open.huicui.me';
+
     /**
      * token 的名字
      */
     const TOKEN_NAME = 'accesstoken';
+
     /**
      * TOKEN 的最长存储时间
      */
     const TOKEN_EXPIRE_TIME = 7100;
+
     /**
      * Client Name
      */
     const CLIENT_NAME = 'HuicuiApi';
+
     /**
      * AppID
      * @var string
      */
     public $AppId = '';
+
     /**
      * AppKey
      * @var string
      */
     public $AppKey = '';
+
     /**
      * AppSecret
      * @var string
      */
     public $AppSecret = '';
+
     /**
      * @var HandlerAdapter
      */
     private $_Handler = null;
+
     /**
+     * 日志
      * @var Logger
      */
-    var $log;
-    var $logWrite = false;
+    private $log;
 
-    public $params = [];
+    /**
+     * 日志开启状态
+     * @var bool
+     */
+    private $logWrite = false;
+
+
+    /**
+     * 所有参数列表
+     * @var array
+     */
+    private $params = [];
+
+    /**
+     * 请求头部信息
+     * @var array
+     */
     protected $headers = [];
 
 
@@ -309,7 +338,7 @@ class HuicuiApi
      * @return ReturnMessage
      * @throws HuicuiApiException
      */
-    protected function requestApi($apiName)
+    public function requestApi($apiName)
     {
         if (empty($apiName) || strlen($apiName) <= 4 || substr($apiName, 0, 1) != '/') {
             throw new HuicuiApiException("接口名不可为空");
