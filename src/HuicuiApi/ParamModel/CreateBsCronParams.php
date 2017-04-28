@@ -10,6 +10,7 @@ namespace HuicuiApi\ParamModel;
 
 
 use HuicuiApi\Exception\HuicuiApiParamException;
+use HuicuiApi\ReturnMessage;
 
 /**
  * Class CreateBsCronParams
@@ -55,7 +56,11 @@ class CreateBsCronParams extends BaseModel
     protected $_mustParams = [
         'cronid', 'data_id', 'data_tag'
     ];
-
+    /**
+     * 有效的请求
+     */
+    const CREATE_CRON_REPEAT=3000 ;
+    const CREATE_CRON_REPEAT_SUBMIT=3001 ;
     public function setParams($params)
     {
         if (!empty($params) && is_array($params)) {
@@ -155,6 +160,19 @@ class CreateBsCronParams extends BaseModel
     public function setPriority($priority)
     {
         $this->priority = intval($priority);
+    }
+
+    /**
+     * 检查是否返回的代码是成功状态
+     * @param int $ErrorCode
+     *
+     * @return bool
+     */
+    public static function isCreateOk($ErrorCode=-1){
+        if(in_array($ErrorCode,[ReturnMessage::STATUS_OK,static::CREATE_CRON_REPEAT,static::CREATE_CRON_REPEAT_SUBMIT])){
+            return true;
+        }
+        return false;
     }
 
 }

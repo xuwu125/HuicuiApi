@@ -17,7 +17,16 @@ class ReturnMessage
     var $error;
     var $message;
     var $data;
+    /**
+     * 请求正常
+     */
     const STATUS_OK = 0;
+    /**
+     * Token 过期
+     */
+    const API_TOKEN_EXP_ONE=4446 ;
+    const API_TOKEN_EXP_TWO=4447 ;
+
 
     function __construct($error, $message, $data)
     {
@@ -89,6 +98,16 @@ class ReturnMessage
     public function setData($data)
     {
         $this->data = $data;
+    }
+
+    /**
+     * 是否 Token 过期
+     */
+    public function isTokenExpire(){
+        if(in_array($this->error,[static::API_TOKEN_EXP_ONE,static::API_TOKEN_EXP_TWO])){
+            return true;
+        }
+        return false;
     }
 
 }
