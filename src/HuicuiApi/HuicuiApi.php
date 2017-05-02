@@ -20,7 +20,7 @@ class HuicuiApi
     /**
      * 当前接口版本
      */
-    const VERSION = '1.2.0';
+    const VERSION = '1.2.1';
 
     /**
      * 请求的协议，支持 http 和 https
@@ -343,7 +343,7 @@ class HuicuiApi
         if (empty($apiName) || strlen($apiName) <= 4 || substr($apiName, 0, 1) != '/') {
             throw new HuicuiApiException("接口名不可为空");
         }
-        $token = $this->getTokenCacheID();
+        $token = $this->getToken();
         if (empty($token)) {
             throw new HuicuiApiException("Token无效，请先存储 Token");
         }
