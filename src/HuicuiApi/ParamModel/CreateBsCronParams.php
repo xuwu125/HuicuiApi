@@ -137,9 +137,9 @@ class CreateBsCronParams extends BaseModel
     public function setDataTagFilter($data_tag_filter)
     {
         if (is_array($data_tag_filter)) {
-            $this->data_tag = !empty($data_tag_filter) ? implode(",", $data_tag_filter) : '';
+            $this->data_tag_filter = !empty($data_tag_filter) ? implode(",", $data_tag_filter) : '';
         } else {
-            $this->data_tag = $data_tag_filter;
+            $this->data_tag_filter = $data_tag_filter;
         }
     }
 
@@ -149,9 +149,9 @@ class CreateBsCronParams extends BaseModel
     public function setDataUidFilter($data_uid_filter)
     {
         if (is_array($data_uid_filter)) {
-            $this->data_tag = !empty($data_uid_filter) ? implode(",", $data_uid_filter) : '';
+            $this->data_uid_filter = !empty($data_uid_filter) ? implode(",", $data_uid_filter) : '';
         } else {
-            $this->data_tag = $data_uid_filter;
+            $this->data_uid_filter = $data_uid_filter;
         }
     }
 
