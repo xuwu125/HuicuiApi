@@ -44,7 +44,7 @@ abstract class BaseModel
      */
     public function getAllVars()
     {
-        $_attributes = get_class_vars(get_class($this));
+        $_attributes = get_object_vars($this);
         $maps = [];
         foreach ($_attributes as $key => $val) {
             if (substr($key, 0, 1) != '_') {
