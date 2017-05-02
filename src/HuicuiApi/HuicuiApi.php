@@ -20,7 +20,7 @@ class HuicuiApi
     /**
      * 当前接口版本
      */
-    const VERSION = '1.2.4';
+    const VERSION = '1.2.5';
 
     /**
      * 请求的协议，支持 http 和 https

@@ -160,7 +160,12 @@ class CreateBsCronParams extends BaseModel
      */
     public function setPriority($priority)
     {
-        $this->priority = intval($priority);
+        $priority=intval($priority);
+        if($priority<0 || $priority>9){
+            throw new HuicuiApiParamException("priority's range is [0-9]");
+        }
+        $this->priority = $priority;
+
     }
 
     /**
