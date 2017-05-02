@@ -47,8 +47,8 @@ abstract class BaseModel
         $_attributes = get_class_vars(get_class($this));
         $maps = [];
         foreach ($_attributes as $key => $val) {
-            if (!substr($key, 0, 1) == '_') {
-                $maps[] = $key = $val;
+            if (substr($key, 0, 1) != '_') {
+                $maps[ $key ] = $val;
             }
         }
         return $maps;
