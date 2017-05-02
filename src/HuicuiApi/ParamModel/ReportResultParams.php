@@ -22,17 +22,17 @@ class ReportResultParams extends BaseModel
      * DID 数据 ID
      * @var string
      */
-    private $did = '';
+    public $did = '';
     /**
      * 投诉的具体内容
      * @var string
      */
-    private $report = '';
+    public $report = '';
     /**
      * 需要检查的必须有的参数列表
      * @var array
      */
-    protected $_mustParams = [
+    public $_mustParams = [
         'did'
     ];
 

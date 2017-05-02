@@ -23,37 +23,37 @@ class CreateBsCronParams extends BaseModel
      * API任务ID
      * @var string
      */
-    private $cronid = '';
+    public $cronid = '';
     /**
      * 本地数据 ID
      * @var string
      */
-    private $data_id = '';
+    public $data_id = '';
     /**
      * 数据选择的标签
      * @var string
      */
-    private $data_tag = '';
+    public $data_tag = '';
     /**
      * 数据需要过滤的标签
      * @var string
      */
-    private $data_tag_filter = '';
+    public $data_tag_filter = '';
     /**
      * 数据需要过滤的用户
      * @var string
      */
-    private $data_uid_filter = '';
+    public $data_uid_filter = '';
     /**
      * 数据优先级
      * @var int
      */
-    private $priority = 0;
+    public $priority = 0;
     /**
      * 需要检查的必须有的参数列表
      * @var array
      */
-    protected $_mustParams = [
+    public $_mustParams = [
         'cronid', 'data_id', 'data_tag'
     ];
     const API_NAME='/v1.0/createbscron';
