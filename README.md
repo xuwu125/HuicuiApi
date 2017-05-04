@@ -1,3 +1,9 @@
+[![Latest Stable Version](https://poser.pugx.org/huicui/huicuiapi/v/stable)](https://packagist.org/packages/huicui/huicuiapi)
+[![Total Downloads](https://poser.pugx.org/huicui/huicuiapi/downloads)](https://packagist.org/packages/huicui/huicuiapi)
+[![Latest Unstable Version](https://poser.pugx.org/huicui/huicuiapi/v/unstable)](https://packagist.org/packages/huicui/huicuiapi)
+[![License](https://poser.pugx.org/huicui/huicuiapi/license)](https://packagist.org/packages/huicui/huicuiapi)
+
+
 # HuicuiApi
 
 Assemble human API
