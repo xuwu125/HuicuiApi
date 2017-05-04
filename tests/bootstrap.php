@@ -4,4 +4,4 @@
  * file that was distributed with this source code.
  */
 date_default_timezone_set('UTC');
-require __DIR__.'/../vendor/autoload.php';
+require '../vendor/autoload.php';
