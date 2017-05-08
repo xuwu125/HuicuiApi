@@ -9,7 +9,7 @@
 namespace HuicuiApi\Exception;
 
 
-class HuicuiApiApapterException extends HuicuiApiException
+class HuicuiApiAdapterException extends HuicuiApiException
 {
     public function __construct($message='', $code=-1100, Exception $previous=null)
     {

@@ -10,7 +10,7 @@ namespace HuicuiApi\Handler;
 
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
-use HuicuiApi\Exception\HuicuiApiApapterException;
+use HuicuiApi\Exception\HuicuiApiAdapterException;
 
 class HandlerAdapter
 {
@@ -21,7 +21,7 @@ class HandlerAdapter
      *
      * @param  \Redis|\Memcached $adapter
      *
-     * @throws HuicuiApiApapterException
+     * @throws HuicuiApiAdapterException
      */
     function __construct($adapter = null)
     {
