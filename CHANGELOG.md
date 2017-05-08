@@ -1,3 +1,6 @@
+## 1.2.9 (2017-05-08)
+* bug fixed
+
 ## 1.2.7 (2017-05-04)
 * add badge 
 * upload MIT LICENSE
