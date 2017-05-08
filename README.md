@@ -52,4 +52,4 @@ $hcapi = HuicuiApi\HuicuiApi::getInstance($AppId, $appKey, $AppSecret);
 
 ```
 
-> 具体使用请参数 doc 目录中的文档
+> 具体使用请参考 doc 目录中的文档
