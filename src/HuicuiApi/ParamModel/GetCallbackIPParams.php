@@ -16,24 +16,14 @@ use HuicuiApi\Exception\HuicuiApiParamException;
  * 创建新任务的参数同模型，单人任务和多人任务均可使用
  * @package HuicuiApi\ParamModel
  */
-class ReportResultParams extends BaseModel
+class GetCallbackIPParams extends BaseModel
 {
-    /**
-     * DID 数据 ID
-     * @var string
-     */
-    public $did = '';
-    /**
-     * 投诉的具体内容
-     * @var string
-     */
-    public $report = '';
+
     /**
      * 需要检查的必须有的参数列表
      * @var array
      */
     public $_mustParams = [
-        'did'
     ];
 
     const API_NAME = '/v1.0/reportresult';
@@ -77,22 +67,6 @@ class ReportResultParams extends BaseModel
             }
         }
         return true;
-    }
-
-    /**
-     * @param string $did
-     */
-    public function setDid($did)
-    {
-        $this->did = $did;
-    }
-
-    /**
-     * @param string $report
-     */
-    public function setReport($report)
-    {
-        $this->report = $report;
     }
 
 

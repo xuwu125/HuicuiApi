@@ -56,12 +56,13 @@ class CreateBsCronParams extends BaseModel
     public $_mustParams = [
         'cronid', 'data_id', 'data_tag'
     ];
-    const API_NAME='/v1.0/createbscron';
+    const API_NAME = '/v1.0/createbscron';
     /**
      * 有效的请求
      */
-    const CREATE_CRON_REPEAT=3000 ;
-    const CREATE_CRON_REPEAT_SUBMIT=3001 ;
+    const CREATE_CRON_REPEAT = 3000;
+    const CREATE_CRON_REPEAT_SUBMIT = 3001;
+
     public function setParams($params)
     {
         if (!empty($params) && is_array($params)) {
@@ -157,11 +158,13 @@ class CreateBsCronParams extends BaseModel
 
     /**
      * @param int $priority
+     *
+     * @throws HuicuiApiParamException
      */
     public function setPriority($priority)
     {
-        $priority=intval($priority);
-        if($priority<0 || $priority>9){
+        $priority = intval($priority);
+        if ($priority < 0 || $priority > 9) {
             throw new HuicuiApiParamException("priority's range is [0-9]");
         }
         $this->priority = $priority;
@@ -170,12 +173,14 @@ class CreateBsCronParams extends BaseModel
 
     /**
      * 检查是否返回的代码是成功状态
+     *
      * @param int $ErrorCode
      *
      * @return bool
      */
-    public static function isCreateOk($ErrorCode=-1){
-        if(in_array($ErrorCode,[ReturnMessage::STATUS_OK,static::CREATE_CRON_REPEAT,static::CREATE_CRON_REPEAT_SUBMIT])){
+    public static function isCreateOk($ErrorCode = -1)
+    {
+        if (in_array($ErrorCode, [ReturnMessage::STATUS_OK, static::CREATE_CRON_REPEAT, static::CREATE_CRON_REPEAT_SUBMIT])) {
             return true;
         }
         return false;
